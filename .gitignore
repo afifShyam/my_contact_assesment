@@ -1,0 +1,11 @@
+.qodo
+.DS_Store
+*.freezed.dart
+*.g.dart
+
+**/Podfile.lock
+**/pubspec.lock
+**/.flutter-plugins-dependencies
+**/.flutter-plugins
+**/*.iml
+**/.dart_tool/
