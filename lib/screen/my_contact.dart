@@ -144,7 +144,8 @@ class _MyContactState extends State<MyContact> {
             child: BlocBuilder<ContactBloc, ContactState>(
               buildWhen: (previous, current) =>
                   previous.status != current.status ||
-                  previous.updateStatus != current.updateStatus,
+                  previous.updateStatus != current.updateStatus ||
+                  previous.addStatus != current.addStatus,
               builder: (context, state) {
                 if (state.status == ContactStateStatus.loading) {
                   return const Center(child: CircularProgressIndicator());
@@ -155,9 +156,15 @@ class _MyContactState extends State<MyContact> {
                     : state.contacts.data.where((c) => c.isFav).toList();
 
                 final filteredContacts = baseList.where((contact) {
-                  final name = '${contact.firstName} ${contact.lastName}'.toLowerCase();
+                  final firstName = contact.firstName.toLowerCase();
+                  final lastName = contact.lastName.toLowerCase();
+                  final fullName = '$firstName $lastName';
                   final email = contact.email.toLowerCase();
-                  return name.contains(query) || email.contains(query);
+                  final queryLower = query.toLowerCase();
+                  return firstName.contains(queryLower) ||
+                      lastName.contains(queryLower) ||
+                      fullName.contains(queryLower) ||
+                      email.contains(queryLower);
                 }).toList();
 
                 if (filteredContacts.isEmpty) {
