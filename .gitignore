@@ -1,0 +1,62 @@
+# Build and generated
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+# Lock files
+pubspec.lock
+Podfile.lock
+
+# Flutter generated files
+*.g.dart
+*.freezed.dart
+*.gen.dart
+*.mocks.dart
+**/GeneratedPluginRegistrant.*
+**/Generated.xcconfig
+**/flutter_export_environment.sh
+**/ephemeral/
+
+# Gradle & IDEs
+android/.gradle/
+.idea/
+.vscode/
+*.iml
+.gradle/
+.gradle-wrapper/
+
+# macOS/Linux/Windows artifacts
+.DS_Store
+*.swp
+*.swo
+*.log
+.history
+*.class
+*.pyc
+
+# Web generated
+web/icons/
+web/favicon.png
+web/manifest.json
+web/index.html
+
+# Windows & Linux build
+linux/
+windows/
+macos/
+.qodo
+
+# CMake / NDK build artifacts
+android/app/.cxx/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+build.ninja
+rules.ninja
+*.o
+*.bin
+*.json
+*.txt
+.cache/

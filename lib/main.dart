@@ -1,40 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:my_contact/my%20contact.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'package:my_contact/bloc/index.dart';
+import 'package:my_contact/screen/my_contact.dart';
+import 'package:my_contact/repositories/index.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final appDirectory = await getApplicationDocumentsDirectory();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: HydratedStorageDirectory(
+      appDirectory.path,
+    ),
+  );
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Assesment flutter',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // TRY THIS: Try running your application with "flutter run". You'll see
-          // the application has a blue toolbar. Then, without quitting the app,
-          // try changing the seedColor in the colorScheme below to Colors.green
-          // and then invoke "hot reload" (save your changes or press the "hot
-          // reload" button in a Flutter-supported IDE, or press "r" if you used
-          // the command line to start the app).
-          //
-          // Notice that the counter didn't reset back to zero; the application
-          // state is not lost during the reload. To reset the state, use hot
-          // restart instead.
-          //
-          // This works for code too, not just values: Most code changes can be
-          // tested with just a hot reload.
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 58, 85, 173),
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) => MaterialApp(
+          title: 'Assesment flutter',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color.fromARGB(255, 58, 85, 173),
+            ),
+            useMaterial3: true,
           ),
-          useMaterial3: true,
-        ),
-        home: const MyContact());
+          home: RepositoryProvider(
+            create: (context) => ContactRepository(),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) =>
+                      ContactBloc(contactRepository: context.read<ContactRepository>())
+                        ..add(LoadContacts(page: 1)),
+                ),
+                BlocProvider<HelperCubit>(
+                  create: (context) => HelperCubit(),
+                ),
+              ],
+              child: MyContact(),
+            ),
+          )),
+    );
   }
 }
