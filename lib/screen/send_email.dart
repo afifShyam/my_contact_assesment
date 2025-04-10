@@ -43,14 +43,30 @@ class SendEmailPage extends StatelessWidget {
                           : FileImage(File(contact.image!)) as ImageProvider)
                       : const AssetImage('assets/images/default_avatar.png'),
                 ),
-                Positioned(
-                  bottom: 0,
-                  right: -2,
-                  child: Icon(
-                    Icons.star_rounded,
-                    color: Color.fromARGB(255, 255, 162, 53),
-                    size: 40,
-                  ),
+                BlocBuilder<ContactBloc, ContactState>(
+                  buildWhen: (previous, current) => previous.contacts != current.contacts,
+                  builder: (context, state) {
+                    final updatedContact =
+                        state.contacts.data.firstWhere((c) => c.id == contact.id);
+
+                    return Positioned(
+                      bottom: 0,
+                      right: -2,
+                      child: IconButton(
+                        iconSize: 35,
+                        icon: Icon(
+                          updatedContact.isFav ? Icons.star_rounded : Icons.star_outline_rounded,
+                          color: ContactColor.yellow,
+                        ),
+                        onPressed: () => context.read<ContactBloc>().add(
+                              FavouriteContact(
+                                id: updatedContact.id,
+                                isFavourite: !updatedContact.isFav,
+                              ),
+                            ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
