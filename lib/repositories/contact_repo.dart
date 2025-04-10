@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:my_contact/model/contact_model.dart';
 import 'package:my_contact/model/pagination.dart';
