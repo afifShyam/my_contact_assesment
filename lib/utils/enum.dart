@@ -3,3 +3,5 @@ enum SortingContact {
   desc,
   asc,
 }
+
+enum ContactFilter { all, favourite }

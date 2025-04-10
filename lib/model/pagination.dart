@@ -36,37 +36,3 @@ abstract class Pagination<T> with _$Pagination<T> {
   Map<String, dynamic> toJson(Object Function(T) toJsonT) =>
       _$PaginationToJson(this as _Pagination<T>, toJsonT);
 }
-
-class PaginationConverter<T> implements JsonConverter<Pagination<T>, Map<String, dynamic>> {
-  final T Function(Map<String, dynamic>) fromJsonT;
-  final Map<String, dynamic> Function(T) toJsonT;
-
-  const PaginationConverter({
-    required this.fromJsonT,
-    required this.toJsonT,
-  });
-
-  @override
-  Pagination<T> fromJson(Map<String, dynamic> json) {
-    return Pagination<T>(
-      page: json['page'] as int,
-      perPage: json['per_page'] as int,
-      total: json['total'] as int,
-      totalPages: json['total_pages'] as int,
-      data: (json['data'] as List<dynamic>)
-          .map((item) => fromJsonT(item as Map<String, dynamic>))
-          .toList(),
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson(Pagination<T> instance) {
-    return {
-      'page': instance.page,
-      'per_page': instance.perPage,
-      'total': instance.total,
-      'total_pages': instance.totalPages,
-      'data': instance.data.map(toJsonT).toList(),
-    };
-  }
-}

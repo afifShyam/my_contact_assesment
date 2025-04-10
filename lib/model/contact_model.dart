@@ -14,5 +14,14 @@ sealed class ContactModel with _$ContactModel {
     @Default(false) bool isFav,
   }) = _ContactModel;
 
+  factory ContactModel.initial() => ContactModel(
+        id: 0,
+        email: '',
+        firstName: '',
+        lastName: '',
+        image: 'https://static-00.iconduck.com/assets.00/person-icon-2048x1935-84jiekjd.png',
+        isFav: false,
+      );
+
   factory ContactModel.fromJson(Map<String, dynamic> json) => _$ContactModelFromJson(json);
 }

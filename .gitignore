@@ -46,3 +46,17 @@ web/index.html
 linux/
 windows/
 macos/
+.qodo
+
+# CMake / NDK build artifacts
+android/app/.cxx/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+build.ninja
+rules.ninja
+*.o
+*.bin
+*.json
+*.txt
+.cache/
