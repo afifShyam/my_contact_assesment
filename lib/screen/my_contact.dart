@@ -21,6 +21,14 @@ class MyContact extends StatefulWidget {
 
 class _MyContactState extends State<MyContact> {
   final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocus = FocusNode();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _searchFocus.dispose();
+    super.dispose();
+  }
 
   void _onDismissed(BuildContext context, ContactModel contact) {
     showCupertinoDialog<String>(
@@ -91,10 +99,11 @@ class _MyContactState extends State<MyContact> {
                         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
                         child: TextField(
                           controller: _searchController,
+                          focusNode: _searchFocus,
                           onChanged: (search) => context.read<HelperCubit>().setSearchQuery(search),
                           onTapOutside: (_) {
                             _searchController.clear();
-                            FocusScope.of(context).unfocus();
+                            _searchFocus.unfocus();
                           },
                           decoration: const InputDecoration(
                             labelText: 'Search Contact',
