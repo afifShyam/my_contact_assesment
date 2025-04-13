@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -66,6 +67,7 @@ class _MyContactState extends State<MyContact> {
       body: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
           final state = context.read<ContactBloc>().state;
+
           if (notification.metrics.pixels >= notification.metrics.maxScrollExtent &&
               state.contacts.hasNextPage &&
               state.status != ContactStateStatus.loading) {
@@ -145,7 +147,7 @@ class _MyContactState extends State<MyContact> {
                   previous.updateStatus != current.updateStatus ||
                   previous.addStatus != current.addStatus,
               builder: (context, state) {
-                if (state.status == ContactStateStatus.loading) {
+                if (state.status == ContactStateStatus.loading && state.contacts.data.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
@@ -186,9 +188,14 @@ class _MyContactState extends State<MyContact> {
                 }
 
                 return ListView.separated(
-                  itemCount: filteredContacts.length,
+                  itemCount: state.contacts.hasNextPage
+                      ? filteredContacts.length + 1
+                      : filteredContacts.length,
                   separatorBuilder: (_, __) => const Divider(),
                   itemBuilder: (context, index) {
+                    if (index == filteredContacts.length) {
+                      return const CupertinoActivityIndicator();
+                    }
                     final contact = filteredContacts[index];
                     return Slidable(
                       startActionPane: ActionPane(

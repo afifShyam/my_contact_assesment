@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:my_contact/model/contact_model.dart';
 import 'package:my_contact/model/pagination.dart';
@@ -6,11 +8,22 @@ class ContactRepository {
   final Dio _dio = Dio();
 
   Future<Pagination<ContactModel>> fetchContacts(int page) async {
-    final response = await _dio.get('https://reqres.in/api/users?page=$page');
+    final response = await _dio.get(
+      'https://reqres.in/api/users',
+      queryParameters: {
+        'page': page,
+        'per_page': 8,
+      },
+    );
+
     final List<ContactModel> data = List<ContactModel>.from(
       (response.data['data']).map((x) => ContactModel.fromJson(x)),
     );
-    return Pagination<ContactModel>(data: data);
+
+    return Pagination<ContactModel>.fromMap(
+      response.data,
+      data,
+    );
   }
 
   Future<ContactModel> addContact(

@@ -39,7 +39,7 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
 
       emit(
         state.copyWith(
-          contacts: state.contacts.copyWith(
+          contacts: result.copyWith(
             data: [
               ...contacts,
               ...result.data,
