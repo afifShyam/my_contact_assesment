@@ -34,5 +34,6 @@ sealed class ContactEvent with _$ContactEvent {
   const factory ContactEvent.sendEmail({
     required String email,
     required String subject,
+    required String body,
   }) = SendEmail;
 }

@@ -156,7 +156,7 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
     }
   }
 
-  Future<void> _sendEmail(SendEmail event, Emitter<ContactState> emit) async {
+  Future<void> _sendEmail(SendEmail event, Emitter emit) async {
     try {
       emit(state.copyWith(status: ContactStateStatus.loading));
 
@@ -165,7 +165,7 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
         path: event.email,
         queryParameters: {
           'subject': event.subject,
-          // Add 'body': 'Hello...' here if needed
+          'body': event.body,
         },
       );
 

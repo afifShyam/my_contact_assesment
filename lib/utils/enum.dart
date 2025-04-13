@@ -4,4 +4,14 @@ enum SortingContact {
   asc,
 }
 
-enum ContactFilter { all, favourite }
+enum ContactFilter {
+  all,
+  favourite,
+}
+
+enum TransitionType {
+  fade,
+  slide,
+  scale,
+  cupertino,
+}

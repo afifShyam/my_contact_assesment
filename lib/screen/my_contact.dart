@@ -1,16 +1,14 @@
-import 'dart:developer';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:my_contact/bloc/index.dart';
 import 'package:my_contact/model/contact_model.dart';
-import 'package:my_contact/screen/add_contact.dart';
-import 'package:my_contact/screen/profile.dart';
-import 'package:my_contact/screen/send_email.dart';
 import 'package:my_contact/utils/index.dart';
 
 class MyContact extends StatefulWidget {
@@ -172,9 +170,12 @@ class _MyContactState extends State<MyContact> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/no_contact.png', width: 40, height: 40),
+                        Image.asset(
+                          'assets/images/no_contact.png',
+                          scale: 1.5,
+                        ),
                         const SizedBox(height: 12),
-                        Text(
+                        SelectableText(
                           'Looks like your contact list is empty. Add a new contact now.',
                           style: TextStyleShared.textStyle.title,
                           textAlign: TextAlign.center,
@@ -216,17 +217,12 @@ class _MyContactState extends State<MyContact> {
                             icon: Icons.edit_square,
                             label: 'Edit',
                             onPressed: (_) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => BlocProvider<ContactBloc>.value(
-                                    value: context.read<ContactBloc>(),
-                                    child: Profile(
-                                      contact: contact,
-                                      isEdit: true,
-                                    ),
-                                  ),
-                                ),
+                              context.go(
+                                '/edit-contact',
+                                extra: {
+                                  'contactBloc': context.read<ContactBloc>(),
+                                  'contact': contact,
+                                },
                               );
                             },
                           ),
@@ -245,7 +241,7 @@ class _MyContactState extends State<MyContact> {
                               radius: 30,
                               backgroundImage: contact.image != null
                                   ? (contact.image!.startsWith('http')
-                                      ? NetworkImage(contact.image!)
+                                      ? CachedNetworkImageProvider(contact.image!)
                                       : FileImage(File(contact.image!)) as ImageProvider)
                                   : const AssetImage('assets/images/default_avatar.png'),
                             ),
@@ -261,18 +257,16 @@ class _MyContactState extends State<MyContact> {
                               ),
                           ],
                         ),
-                        title: Text('${contact.firstName} ${contact.lastName}'),
-                        subtitle: Text(contact.email),
+                        title: SelectableText('${contact.firstName} ${contact.lastName}'),
+                        subtitle: SelectableText(contact.email),
                         trailing: GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => BlocProvider.value(
-                                  value: context.read<ContactBloc>(),
-                                  child: SendEmailPage(contact: contact),
-                                ),
-                              ),
+                            context.go(
+                              '/send-email',
+                              extra: {
+                                'contactBloc': context.read<ContactBloc>(),
+                                'contact': contact,
+                              },
                             );
                           },
                           child: Image.asset(
@@ -292,17 +286,11 @@ class _MyContactState extends State<MyContact> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => BlocProvider<ContactBloc>.value(
-                value: context.read<ContactBloc>(),
-                child: Profile(
-                  contact: ContactModel.initial(),
-                  isEdit: false,
-                ),
-              ),
-            ),
+          context.go(
+            '/add-contact',
+            extra: {
+              'contactBloc': context.read<ContactBloc>(),
+            },
           );
         },
         backgroundColor: ContactColor.primary,
