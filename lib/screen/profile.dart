@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_contact/bloc/index.dart';
 import 'package:my_contact/model/contact_model.dart';
@@ -139,7 +140,7 @@ class ProfileState extends State<Profile> {
                           radius: 70,
                           backgroundImage: widget.contact.image != null
                               ? (widget.contact.image!.startsWith('http')
-                                  ? NetworkImage(widget.contact.image!)
+                                  ? CachedNetworkImageProvider(widget.contact.image!)
                                   : FileImage(File(widget.contact.image!)) as ImageProvider)
                               : const AssetImage('assets/images/default_avatar.png'),
                         ),

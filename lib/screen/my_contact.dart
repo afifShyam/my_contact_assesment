@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -169,9 +170,12 @@ class _MyContactState extends State<MyContact> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/no_contact.png', width: 40, height: 40),
+                        Image.asset(
+                          'assets/images/no_contact.png',
+                          scale: 1.5,
+                        ),
                         const SizedBox(height: 12),
-                        Text(
+                        SelectableText(
                           'Looks like your contact list is empty. Add a new contact now.',
                           style: TextStyleShared.textStyle.title,
                           textAlign: TextAlign.center,
@@ -237,7 +241,7 @@ class _MyContactState extends State<MyContact> {
                               radius: 30,
                               backgroundImage: contact.image != null
                                   ? (contact.image!.startsWith('http')
-                                      ? NetworkImage(contact.image!)
+                                      ? CachedNetworkImageProvider(contact.image!)
                                       : FileImage(File(contact.image!)) as ImageProvider)
                                   : const AssetImage('assets/images/default_avatar.png'),
                             ),
@@ -253,8 +257,8 @@ class _MyContactState extends State<MyContact> {
                               ),
                           ],
                         ),
-                        title: Text('${contact.firstName} ${contact.lastName}'),
-                        subtitle: Text(contact.email),
+                        title: SelectableText('${contact.firstName} ${contact.lastName}'),
+                        subtitle: SelectableText(contact.email),
                         trailing: GestureDetector(
                           onTap: () {
                             context.go(

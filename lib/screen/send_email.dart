@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +41,7 @@ class SendEmailPage extends StatelessWidget {
                   radius: 70,
                   backgroundImage: contact.image != null
                       ? (contact.image!.startsWith('http')
-                          ? NetworkImage(contact.image!)
+                          ? CachedNetworkImageProvider(contact.image!)
                           : FileImage(File(contact.image!)) as ImageProvider)
                       : const AssetImage('assets/images/default_avatar.png'),
                 ),
@@ -110,7 +111,7 @@ class SendEmailPage extends StatelessWidget {
                 spacing: 16,
                 children: [
                   Icon(Icons.email),
-                  Text(contact.email),
+                  SelectableText(contact.email),
                 ],
               ),
             ),
