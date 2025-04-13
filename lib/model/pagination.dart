@@ -10,7 +10,7 @@ abstract class Pagination<T> with _$Pagination<T> {
   @JsonSerializable(genericArgumentFactories: true)
   const factory Pagination({
     @Default(1) int page,
-    @JsonKey(name: 'per_page') @Default(20) int perPage,
+    @JsonKey(name: 'per_page') @Default(6) int perPage,
     @Default(0) int total,
     @JsonKey(name: 'total_pages') @Default(0) int totalPages,
     @Default([]) List<T> data,
@@ -20,10 +20,22 @@ abstract class Pagination<T> with _$Pagination<T> {
 
   factory Pagination.initial() => Pagination(
         page: 1,
-        perPage: 20,
+        perPage: 6,
         total: 0,
         totalPages: 0,
         data: [],
+      );
+
+  factory Pagination.fromMap(
+    Map<String, dynamic> map,
+    List<T> listData,
+  ) =>
+      Pagination(
+        page: map['page'],
+        perPage: map['per_page'],
+        total: map['total'],
+        totalPages: map['total_pages'],
+        data: listData,
       );
 
   factory Pagination.fromJson(
