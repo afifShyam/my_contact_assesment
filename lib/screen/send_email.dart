@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_contact/bloc/bloc/contact_bloc.dart';
 import 'package:my_contact/model/contact_model.dart';
 import 'package:my_contact/utils/index.dart';
@@ -78,7 +79,14 @@ class SendEmailPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Chip(
+            ActionChip(
+              onPressed: () => context.go(
+                '/edit-contact',
+                extra: {
+                  'contactBloc': context.read<ContactBloc>(),
+                  'contact': contact,
+                },
+              ),
               label: Text('Edit Profile',
                   style: TextStyleShared.textStyle.button.copyWith(
                     color: ContactColor.primary,
@@ -111,10 +119,13 @@ class SendEmailPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<ContactBloc>().add(SendEmail(
-                        email: contact.email,
-                        subject: 'Hi, hope you hired me!',
-                      ));
+                  context.read<ContactBloc>().add(
+                        SendEmail(
+                          email: contact.email,
+                          subject: 'Greeting',
+                          body: 'Hi, ${contact.firstName} ${contact.lastName} how are you?',
+                        ),
+                      );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: ContactColor.primary,
